@@ -42,7 +42,6 @@ public class Flock : MonoBehaviour
         if (turning)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * Time.deltaTime);
-            //speed = 7.0f;
         }
         else
         {
@@ -90,7 +89,6 @@ public class Flock : MonoBehaviour
         if (groupSize > 0)
         {
             vcentre = vcentre / groupSize + (goalPos - this.transform.position);
-            speed = gSpeed / groupSize;
 
             Vector3 direction = (vcentre + vavoid) - transform.position;
             if (direction != Vector3.zero)
