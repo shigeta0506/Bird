@@ -5,7 +5,7 @@ using UnityEngine;
 public class FlockManager : MonoBehaviour
 {
     [SerializeField] private GameObject birdPrefab;
-    private int numbird = 10;
+    private int numbird = 5;
     public GameObject[] allbird;
     public Vector3 flyLimits = new Vector3(5, 5, 5);
 
