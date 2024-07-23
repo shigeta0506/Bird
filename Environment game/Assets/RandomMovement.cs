@@ -4,22 +4,25 @@ using UnityEngine;
 
 public class RandomMovement : MonoBehaviour
 {
-    private float chargeTime = 5.0f;
-    private float timeCount;
-    private float speed = 5.0f;
+    public float speed = 5f;
+    public float detectionDistance = 5f;
 
     void Update()
     {
-        timeCount += Time.deltaTime;
+        // 前方に向かって移動
+        transform.Translate(Vector3.forward * speed * Time.deltaTime);
 
-        transform.position += transform.forward * Time.deltaTime * speed;
-
-        if (timeCount > chargeTime)
+        // Raycastで障害物を検出
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.forward, out hit, detectionDistance))
         {
-            Vector3 course = new Vector3(0, Random.Range(0, 180), 0);
-            transform.localRotation = Quaternion.Euler(course);
-
-            timeCount = 0;
+            // 障害物が検出された場合、右か左に直角に回避
+            if (hit.collider.CompareTag("Obstacle"))
+            {
+                float turnAngle = Random.Range(0, 2) == 0 ? 90f : -90f;
+                // Y軸回転のみを行う
+                transform.Rotate(0, turnAngle, 0);
+            }
         }
     }
 }
