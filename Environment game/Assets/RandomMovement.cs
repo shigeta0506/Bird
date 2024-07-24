@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class RandomMovement : MonoBehaviour
 {
-    public float speed = 5f;
-    public float detectionDistance = 5f;
+    private float speed = 5f;
+    private float detectionDistance = 7f;
 
     void Update()
     {

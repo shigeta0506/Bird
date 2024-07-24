@@ -12,9 +12,12 @@ public class Flock : MonoBehaviour
     //視認距離
     private float neighbourDistance = 5.0f;
     //回避距離
-    private float avoidDistance = 5.0f;
+    private float avoidDistance = 7.0f;
     //回転速度
     private float rotationSpeed = 5.0f;
+
+    //障害物回避距離
+    private float obstacleAvoidanceDistance = 15.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -29,7 +32,7 @@ public class Flock : MonoBehaviour
         Bounds bounds = new Bounds(flockManager.transform.position, flockManager.flyLimits * 2);
 
         //衝突を検出
-        RaycastHit hit = new RaycastHit();
+        RaycastHit hit;
 
         //方向
         Vector3 direction = Vector3.zero;
@@ -43,13 +46,17 @@ public class Flock : MonoBehaviour
             //スピードアップ
             speed = originalSpeed * 1.5f;
         }
-        else if (Physics.Raycast(transform.position, this.transform.forward * 50, out hit))
+        else if (Physics.Raycast(transform.position, this.transform.forward, out hit, obstacleAvoidanceDistance))
         {
-            turning = true;
-            direction = Vector3.Reflect(this.transform.forward, hit.normal);
+            // 障害物が特定のタグを持っているかを確認
+            if (hit.collider != null && hit.collider.CompareTag("Obstacle"))
+            {
+                turning = true;
+                direction = Vector3.Reflect(this.transform.forward, hit.normal);
 
-            //スピードアップ
-            speed = originalSpeed * 1.5f;
+                //スピードアップ
+                speed = originalSpeed * 1.5f;
+            }
         }
         else
         {
@@ -61,7 +68,7 @@ public class Flock : MonoBehaviour
         //方向変更の必要無
         if (turning)
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * 2.0f * Time.deltaTime);
         }
         else
         {
